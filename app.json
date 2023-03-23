@@ -12,16 +12,8 @@
     "website": "t.me/TgxBots",
     "success_url": "https://t.me/TgxBots",
     "env": {
-        "API_HASH": {
-            "description": "Your API HASH from my.telegram.org",
-            "value": ""
-        },
-        "API_ID": {
-            "description": "Your API ID from my.telegram.org",
-            "value": ""
-        },
-        "TOKEN": {
-            "description": "Bot token, get it from @BotFather.",
+        "Name": {
+            "description": "Only Name.",
             "value": ""
         }
     },
