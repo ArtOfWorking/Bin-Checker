@@ -2,6 +2,7 @@ from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 import asyncio
 import openai
+import os
 import re
 import logging
 # create a session using the session string
