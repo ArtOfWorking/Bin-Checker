@@ -34,7 +34,7 @@ def generate_text(prompt):
     response = completion.choices[0].text
     return response
 
-@client.on(events.NewMessage(pattern="^[!?/]q"))
+@client.on(events.NewMessage(pattern="^[!?!]q"))
 async def binc(event):
     try:
         print ("Enter")
