@@ -1,4 +1,5 @@
 import openai
+import os
 import requests
 from telethon import TelegramClient, events
 
