@@ -10,7 +10,7 @@ openai.api_key = CHATGPT_TOKEN
 # Set up Telegram bot and API key
 api_id = 11891876
 api_hash = 'b48fe8105495265d1095038f8b5778cf'
-bot_token = '5975408746:AAFjhZtjw44y7B6LJtImQ3J_rqhxEqas3SU'
+bot_token = '6157888032:AAHWuiSqpGLFknEaYohj9T-Jpnj0Iv_O1Rs'
 client = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
 
 # Handle incoming messages
