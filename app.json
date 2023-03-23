@@ -12,8 +12,8 @@
     "website": "t.me/TgxBots",
     "success_url": "https://t.me/TgxBots",
     "env": {
-        "Name": {
-            "description": "Only Name.",
+        "CHATGPT_TOKEN": {
+            "description": "API.",
             "value": ""
         }
     },
