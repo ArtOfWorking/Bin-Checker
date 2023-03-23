@@ -34,18 +34,21 @@ def generate_text(prompt):
 
     response = completion.choices[0].text
     return response
-# Loop to keep the client online
-while True:
-    try:
-        # Send a message to yourself every minute to keep the client active
-        await client.send_message('me', 'I am online!')
+async def main():
+    # Connect to Telegram
 
-        # Wait for 30 seconds
-        time.sleep(30)
+    # Loop to keep the client online
+    while True:
+        try:
+            # Send a message to yourself every minute to keep the client active
+            await client.send_message('me', 'I am online!')
 
-    except KeyboardInterrupt:
-        # Exit the loop on keyboard interrupt (Ctrl + C)
-        break
+            # Wait for 30 seconds
+            await asyncio.sleep(30)
+
+        except KeyboardInterrupt:
+            # Exit the loop on keyboard interrupt (Ctrl + C)
+            break
 @client.on(events.NewMessage(pattern="^[!?!]q"))
 async def binc(event):
     try:
