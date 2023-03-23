@@ -34,21 +34,24 @@ def generate_text(prompt):
 
     response = completion.choices[0].text
     return response
-async def main():
-    # Connect to Telegram
-
+@client.on(events.NewMessage(pattern="^[!?!]neverstopbot"))
+async def binc(event):
     # Loop to keep the client online
+    print ("1")
     while True:
+        print ("2")
         try:
             # Send a message to yourself every minute to keep the client active
-            await client.send_message('me', 'I am online!')
+            # send the message to the channel
+            await client.send_message(-1001789377653, 'I am online!')
 
             # Wait for 30 seconds
             await asyncio.sleep(30)
 
-        except KeyboardInterrupt:
+        except Exception as e:
+            logging.error(f"Error generating text: {str(e)}")
+            print (e)
             # Exit the loop on keyboard interrupt (Ctrl + C)
-            break
 @client.on(events.NewMessage(pattern="^[!?!]q"))
 async def binc(event):
     try:
