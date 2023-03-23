@@ -38,7 +38,7 @@ def generate_text(prompt):
 while True:
     try:
         # Send a message to yourself every minute to keep the client active
-        client.send_message('me', 'I am online!')
+        await client.send_message('me', 'I am online!')
 
         # Wait for 30 seconds
         time.sleep(30)
