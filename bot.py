@@ -4,7 +4,6 @@ from telethon import TelegramClient, events
 import PyBypass as bypasser
 from telethon import Button, events, TelegramClient
 from telethon import events, custom, Button
-import logging
 logging.basicConfig(level=logging.INFO)
 # replace the values with your own API ID, API Hash, and bot token
 api_id = 11891876
