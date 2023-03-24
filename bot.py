@@ -38,7 +38,7 @@ async def start_handler(event):
 
 
 about = f"""
-<b>Mʏ Nᴀᴍᴇ: </b> <a href="https://t.me/unknown_insta_follow_bot">Lɪɴᴋ Bʏᴘᴀssᴇʀ</a>
+<b>Mʏ Nᴀᴍᴇ: </b> <a href="https://t.me/LinkBypasserBotHub_Bot">Lɪɴᴋ Bʏᴘᴀssᴇʀ</a>
 
 <b>Vᴇʀsɪᴏɴ: 0.0.0-Lɪɴᴋ_Bʏᴘᴀssᴇʀ_Bᴏᴛ_Tɢ</v>
 
