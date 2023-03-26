@@ -1,6 +1,6 @@
 {
-    "name": "Bin-Checker Bot",
-    "description": "A telegram Bin-Checker Bot to check is bins are valid or not.",
+    "name": "ChatGpt Bot",
+    "description": "A telegram ChatGpt Bot for ask questions. ",
     "logo": "https://telegra.ph/file/2ec26162e103aed65ba50.jpg",
     "keywords": [
         "telegram",
@@ -8,9 +8,9 @@
         "telegram-bot",
         "bin"
     ],
-    "repository": "https://github.com/TgxBotz/Bin-Checker",
-    "website": "t.me/TgxBots",
-    "success_url": "https://t.me/TgxBots",
+    "repository": "https://github.com/ArtOfWorking/Bin-Checker",
+    "website": "t.me/ART_OF_WORKING",
+    "success_url": "https://t.me/Art_Of_Working",
     "env": {
         "API_HASH": {
             "description": "Your API HASH from my.telegram.org",
@@ -18,6 +18,10 @@
         },
         "API_ID": {
             "description": "Your API ID from my.telegram.org",
+            "value": ""
+        },
+        "CHATGPT_TOKEN": {
+            "description": "Your CHATGPT TOKEN from beta.openai.com",
             "value": ""
         },
         "TOKEN": {
