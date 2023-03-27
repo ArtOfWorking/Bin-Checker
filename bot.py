@@ -20,16 +20,19 @@ logging.basicConfig(level=logging.INFO)
 openai.api_key = CHATGPT_TOKEN
 
 def generate_text(prompt):
-    completion = openai.ChatCompletion.create(
-      model="gpt-3.5-turbo",
-      messages=[
-        {"role": "user", "content":  prompt}
-      ],
-
+    # Create a new chat completion using the GPT-3.5-Turbo model
+    completion = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=prompt,
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.5,
     )
 
-    response = completion.choices[0].text
-    print (response)
+    # Extract the generated text from the chat completion
+    response = completion.choices[0].text.strip()
+
     return response
 
 @client.on(events.NewMessage(pattern="^[!?!]q"))
@@ -45,7 +48,7 @@ async def binc(event):
         await event.reply(e)
     generated_text = ""
     try:
-        
+        global generated_text
         generated_text = generate_text(prompt)
         # print the generated text
         logging.info(f"Generated text: {generated_text}")
