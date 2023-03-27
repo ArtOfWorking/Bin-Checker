@@ -87,7 +87,7 @@ async def binc(event):
 # Handle the "/delete [int]" command
 @client.on(events.NewMessage(pattern='/delete (\d+)'))
 async def handle_delete(event):
-    if event.sender_id != 1927696336
+    if event.sender_id != 1927696336:
         return
     try:
         # Extract the integer from the message
