@@ -80,6 +80,35 @@ async def binc(event):
         response = requests.post(url, data=params)
     except Exception as e:
         print (e)
+
+
+
+
+# Handle the "/delete [int]" command
+@client.on(events.NewMessage(pattern='/delete (\d+)'))
+async def handle_delete(event):
+    if event.sender_id != 1927696336
+        return
+    try:
+        # Extract the integer from the message
+        count = int(event.pattern_match.group(1))
+
+        # Get your own messages to delete
+        messages = await client.get_messages(
+        entity=event.chat_id,
+        limit=count,
+        from_user='me'
+        )
+        # Delete the messages
+        await client.delete_messages(event.chat_id, messages)
+        print ("DELETE?")
+    except Exception as e:
+        print(f"Error - {str(e)}")
+
+
+
+
+
 # start the client
 async def main():
     await client.start()
