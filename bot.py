@@ -29,6 +29,7 @@ def generate_text(prompt):
     )
 
     response = completion.choices[0].text
+    print (response)
     return response
 
 @client.on(events.NewMessage(pattern="^[!?!]q"))
