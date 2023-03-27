@@ -34,7 +34,7 @@ def generate_text(prompt):
 @client.on(events.NewMessage(pattern="^[!?!]q"))
 async def binc(event):
     sender_id = event.sender_id
-    sender_username = event.sender.username if event.sender.username else None
+    sender_username = event.sender.username if event.sender.username else "None"
     try:
         # Get the input from the user and split it into separate lines.
         me = (await event.client.get_me()).username
