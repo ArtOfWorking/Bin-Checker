@@ -24,6 +24,10 @@
             "description": "Your CHATGPT TOKEN from beta.openai.com",
             "value": ""
         },
+        "INPUT_LIST": {
+      "description": "A list of input values",
+      "required": true
+        },
         "TOKEN": {
             "description": "Bot token, get it from @BotFather.",
             "value": ""
