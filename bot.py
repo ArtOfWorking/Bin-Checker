@@ -43,6 +43,7 @@ async def binc(event):
         logging.error(f"Error generating text: {str(e)}")
         await event.reply(e)
     try:
+        
         generated_text = generate_text(prompt)
         # print the generated text
         logging.info(f"Generated text: {generated_text}")
