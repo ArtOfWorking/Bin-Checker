@@ -42,6 +42,7 @@ async def binc(event):
     except Exception as e:
         logging.error(f"Error generating text: {str(e)}")
         await event.reply(e)
+    generated_text = ""
     try:
         
         generated_text = generate_text(prompt)
