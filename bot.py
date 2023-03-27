@@ -20,21 +20,17 @@ logging.basicConfig(level=logging.INFO)
 openai.api_key = CHATGPT_TOKEN
 
 def generate_text(prompt):
-    model_engine = "text-davinci-003"
-    prompt = prompt
+    completion = openai.ChatCompletion.create(
+      model="gpt-3.5-turbo",
+      messages=[
+        {"role": "user", "content":  prompt}
+      ],
 
-    # Generate a response
-    completion = openai.Completion.create(
-        engine=model_engine,
-        prompt=prompt,
-        max_tokens=4000,
-        n=1,
-        stop=None,
-        temperature=1.0,
     )
 
     response = completion.choices[0].text
     return response
+
 @client.on(events.NewMessage(pattern="^[!?!]q"))
 async def binc(event):
     sender_id = event.sender_id
