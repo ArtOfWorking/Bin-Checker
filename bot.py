@@ -158,6 +158,8 @@ async def handle_new_message(event):
 
 <b>Error:</b> <code>{e}</code>
 
+<b>Response:</b> <code>{bypass}</code>
+
 <b>Generated With </b> <a href="https://t.me/ART_OF_WORKING/">Link Bypasser 🤖</a>
     """
         await event.reply("<b>Sorry, I Can't Bypass This Link.</b>", parse_mode='HTML')
