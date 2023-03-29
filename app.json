@@ -20,12 +20,16 @@
             "description": "Your API ID from my.telegram.org",
             "value": ""
         },
-        "CHATGPT_TOKEN": {
-            "description": "Your CHATGPT TOKEN from beta.openai.com",
+        "MESSAGE": {
+            "description": "Your MESSAGE",
             "value": ""
         },
-        "INPUT_LIST": {
-      "description": "A list of input values",
+        "channel_ids_str": {
+            "description": "Your CHANNELS ID",
+            "value": ""
+        },
+        "channel_url_str": {
+      "description": "GIVE URLs",
       "required": true
         },
         "TOKEN": {
