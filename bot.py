@@ -10,14 +10,14 @@ api_id = 11891876
 api_hash = 'b48fe8105495265d1095038f8b5778cf'
 bot_token = '6216317473:AAFEIvVyn3Cr45h5D7S4qNbfXPXyaqpzIQ4'
 
-channel_ids = [-1001963763050]
+channel_ids = [-1001371265936]
 msg = """
 <b>We kindly request you to join our channel first.
 
 This is to ensure that you will receive all updates, announcements, and important messages related to the bot.<b/>
 
 
-<i>JOIN NOW - </i> @rajfiles
+<i>JOIN NOW - </i> @raj_files
 """
 
 client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
