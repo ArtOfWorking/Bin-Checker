@@ -1,5 +1,6 @@
 import requests
 import time
+import os
 from telethon import TelegramClient, events
 import PyBypass as bypasser
 from telethon import Button, events, TelegramClient
