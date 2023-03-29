@@ -15,31 +15,26 @@
         "API_HASH": {
             "description": "Your API HASH from my.telegram.org",
             "value": ""
-      "required": false
         },
         "API_ID": {
             "description": "Your API ID from my.telegram.org",
             "value": ""
-      "required": false
         },
         "MESSAGE": {
             "description": "Your MESSAGE",
             "value": ""
-      "required": false
         },
         "channel_ids_str": {
             "description": "Your CHANNELS ID",
             "value": ""
-      "required": false
         },
         "channel_url_str": {
       "description": "GIVE URLs",
-      "required": false
         },
         "TOKEN": {
             "description": "Bot token, get it from @BotFather.",
             "value": ""
-      "required": false
+      "required": true
         }
     },
     "buildpacks": [
