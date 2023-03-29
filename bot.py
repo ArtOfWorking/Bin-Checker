@@ -12,8 +12,11 @@ bot_token = '6216317473:AAFEIvVyn3Cr45h5D7S4qNbfXPXyaqpzIQ4'
 
 channel_ids = [-1001963763050]
 msg = """
-<b>we kindly request you to join our channel first.
+<b>We kindly request you to join our channel first.
+
 This is to ensure that you will receive all updates, announcements, and important messages related to the bot.<b/>
+
+
 <i>JOIN NOW - </i> @rajfiles
 """
 
