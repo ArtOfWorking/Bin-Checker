@@ -9,28 +9,13 @@ from telethon import events, custom, Button
 api_id = 11891876
 api_hash = 'b48fe8105495265d1095038f8b5778cf'
 bot_token = '6216317473:AAFEIvVyn3Cr45h5D7S4qNbfXPXyaqpzIQ4'
-msg = os.environ.get("MESSAGE", None)
-channel_ids_str = os.environ.get("CHANNEL_IDS", None)
-channel_url_str = os.environ.get("CHANNEL_URL", None)
 
-if channel_ids_str != None:
-    channel_ids = [int(id) for id in channel_ids_str.split(",")]
-else:
-    channel_ids = None
-
-
-if channel_url_str != None:
-    channel_url = [s.strip() for s in channel_url_str.split(",")]
-
-else:
-    channel_url = None
-name = ""
-if channel_url != None:
-    for i in channel_url:
-        name += url + "\n"
-
-
-
+channel_ids = [-1001963763050]
+msg = """
+<b>we kindly request you to join our channel first.
+This is to ensure that you will receive all updates, announcements, and important messages related to the bot.<b/>
+<i>JOIN NOW - </i> @rajfiles
+"""
 
 client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
 
@@ -106,7 +91,7 @@ async def handle_new_message(event):
             # proceed with your logic here
         else:
             print("User has not joined all channels")
-            await event.respond(msg, link_preview=False)
+            await event.respond(msg, link_preview=False, parse_mode='HTML')
             return
             # handle the case where the user has not joined all channels here
     global bypass
