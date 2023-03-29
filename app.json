@@ -29,12 +29,12 @@
             "value": ""
         },
         "channel_url_str": {
-      "description": "GIVE URLs",
+      "description": "GIVE URLs"
+            "value": ""
         },
         "TOKEN": {
             "description": "Bot token, get it from @BotFather.",
             "value": ""
-      "required": true
         }
     },
     "buildpacks": [
