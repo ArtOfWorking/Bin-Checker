@@ -11,19 +11,21 @@ bot_token = '6216317473:AAFEIvVyn3Cr45h5D7S4qNbfXPXyaqpzIQ4'
 msg = os.environ.get("MESSAGE", None)
 channel_ids_str = os.environ.get("CHANNEL_IDS", None)
 channel_url_str = os.environ.get("CHANNEL_URL", None)
-if channel_ids != None:
+
+if channel_ids_str != None:
     channel_ids = [int(id) for id in channel_ids_str.split(",")]
 else:
     channel_ids = None
 
 
-if channel_ids != None:
-    channel_url = [int(id) for id in channel_url_str.split(",")]
+if channel_url_str != None:
+    channel_url = [s.strip() for s in channel_url_str.split(",")]
+
 else:
     channel_url = None
 name = ""
 if channel_url != None:
-    for i in range channel_url:
+    for i in channel_url:
     name += url + "\n"
 
 
