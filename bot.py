@@ -105,7 +105,7 @@ async def handle_new_message(event):
             # proceed with your logic here
         else:
             print("User has not joined all channels")
-                await event.respond(msg, link_preview=False)
+            await event.respond(msg, link_preview=False)
             return
             # handle the case where the user has not joined all channels here
     global bypass
