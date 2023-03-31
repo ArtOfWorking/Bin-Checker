@@ -23,7 +23,7 @@ This is to ensure that you will receive all updates, announcements, and importan
 <i>JOIN NOW - </i> @Raj_Files
 """
 
-client = TelegramClient(session, api_id, api_hash)
+client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
 logging.basicConfig(level=logging.INFO)
 
 openai.api_key = CHATGPT_TOKEN
