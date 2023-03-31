@@ -1,4 +1,5 @@
 from telethon import TelegramClient, events
+
 from telethon.sessions import StringSession
 import asyncio
 import openai
@@ -8,12 +9,17 @@ import time
 import re
 import logging
 # create a session using the session string
+# create a session using the session string
 CHATGPT_TOKEN = os.environ.get("CHATGPT_TOKEN", None)
 session_string = '1BVtsOK0Bu14yWl_aGjrmF6V0IV4iCdMBJWp_8HADH3EzEFk1jLtYVW8KHeJgiMpcohjyf2hcyu6IYODtcsjlJgmiPTQz96ROMAOFkhEe_RNBoVGMh4YcXV_3yOl_QC6EVuSDiRlOLFk71dIlc092Udbv7Cen3YSAajcUj95w1TNhK_p3Apgr-8ZaBhmZKatETugmoSJ74alLXXIceRNrMJWVjh2d3loSDSbUmP8McIr2wQcJ1c53nChn4ut2F17pXqeeKzQS4Xqy295SV1VR3CbLfxQ_w8iA8oxWuPEulfqPogSjL1sCeqdSrLMqy-LFL3Np0QAtq-6Z_3FPr-TMsKRwPjOaHvs='
 session = StringSession(session_string)
 # configure Telethon
 api_id = int(os.environ.get("API_ID", 6))
 api_hash = os.environ.get("API_HASH", None)
+
+excluded_channels = os.environ.get('INPUT_LIST', '').split(',')
+
+
 client = TelegramClient(session, api_id, api_hash)
 logging.basicConfig(level=logging.INFO)
 
@@ -33,8 +39,14 @@ def generate_text(prompt):
     return response
 @client.on(events.NewMessage(pattern="^[!?!]q"))
 async def binc(event):
+    if event.is_group or event.is_channel:
+        if event.chat_id in excluded_channels:
+            return  # Ignore messages from excluded channels
     sender_id = event.sender_id
-    sender_username = event.sender.username if event.sender.username else "None"
+    if event.sender and event.sender.username:
+        sender_username = event.sender.username
+    else:
+        sender_username = None
     try:
         # Get the input from the user and split it into separate lines.
         me = (await event.client.get_me()).username
@@ -42,7 +54,6 @@ async def binc(event):
     except Exception as e:
         logging.error(f"Error generating text: {str(e)}")
         await event.reply(e)
-    generated_text = ""
     try:
         global generated_text
         generated_text = generate_text(prompt)
