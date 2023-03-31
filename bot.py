@@ -1,5 +1,4 @@
 from telethon import TelegramClient, events
-
 from telethon.sessions import StringSession
 import asyncio
 import openai
@@ -9,21 +8,13 @@ import time
 import re
 import logging
 # create a session using the session string
-# create a session using the session string
 CHATGPT_TOKEN = os.environ.get("CHATGPT_TOKEN", None)
-bot_token = "6188938989:AAHwD-PD60Tgs450qR2_eqDzmvA-Z-4T_kQ"
+session_string = '1BVtsOK0Bu14yWl_aGjrmF6V0IV4iCdMBJWp_8HADH3EzEFk1jLtYVW8KHeJgiMpcohjyf2hcyu6IYODtcsjlJgmiPTQz96ROMAOFkhEe_RNBoVGMh4YcXV_3yOl_QC6EVuSDiRlOLFk71dIlc092Udbv7Cen3YSAajcUj95w1TNhK_p3Apgr-8ZaBhmZKatETugmoSJ74alLXXIceRNrMJWVjh2d3loSDSbUmP8McIr2wQcJ1c53nChn4ut2F17pXqeeKzQS4Xqy295SV1VR3CbLfxQ_w8iA8oxWuPEulfqPogSjL1sCeqdSrLMqy-LFL3Np0QAtq-6Z_3FPr-TMsKRwPjOaHvs='
+session = StringSession(session_string)
 # configure Telethon
 api_id = int(os.environ.get("API_ID", 6))
 api_hash = os.environ.get("API_HASH", None)
-
-channel_ids = [-1001371265936]
-msg = """
-<b>We kindly request you to join our channel first.
-This is to ensure that you will receive all updates, announcements, and important messages related to the bot.<b/>
-<i>JOIN NOW - </i> @Raj_Files
-"""
-
-client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
+client = TelegramClient(session, api_id, api_hash)
 logging.basicConfig(level=logging.INFO)
 
 openai.api_key = CHATGPT_TOKEN
@@ -42,33 +33,8 @@ def generate_text(prompt):
     return response
 @client.on(events.NewMessage(pattern="^[!?!]q"))
 async def binc(event):
-    if channel_ids != None:
-        sender_id = event.sender_id
-        num_channels_joined = 0
-        for channel_id in channel_ids:
-            async for user in client.iter_participants(channel_id):
-                if user.id == sender_id:
-                    print(f"User has joined channel {channel_id}")
-                    num_channels_joined += 1
-                    break
-
-        if num_channels_joined == len(channel_ids):
-            print("User has joined all channels")
-            # proceed with your logic here
-        else:
-            print("User has not joined all channels")
-            await event.respond(msg, link_preview=False, parse_mode='HTML')
-            return
-            # handle the case where the user has not joined all channels here
-
-    if event.is_group or event.is_channel:
-        if event.chat_id in excluded_channels:
-            return  # Ignore messages from excluded channels
     sender_id = event.sender_id
-    if event.sender and event.sender.username:
-        sender_username = event.sender.username
-    else:
-        sender_username = None
+    sender_username = event.sender.username if event.sender.username else "None"
     try:
         # Get the input from the user and split it into separate lines.
         me = (await event.client.get_me()).username
@@ -76,6 +42,7 @@ async def binc(event):
     except Exception as e:
         logging.error(f"Error generating text: {str(e)}")
         await event.reply(e)
+    generated_text = ""
     try:
         global generated_text
         generated_text = generate_text(prompt)
