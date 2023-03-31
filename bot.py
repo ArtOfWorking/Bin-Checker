@@ -8,15 +8,15 @@ import os
 import time
 import re
 import logging
-logging.basicConfig(level=logging.INFO)
 # create a session using the session string
 # create a session using the session string
-CHATGPT_TOKEN = "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"
-bot_token = '6188938989:AAHwD-PD60Tgs450qR2_eqDzmvA-Z-4T_kQ'
-print ("hello")
+CHATGPT_TOKEN = os.environ.get("CHATGPT_TOKEN", None)
+session_string = '1BVtsOK0Bu14yWl_aGjrmF6V0IV4iCdMBJWp_8HADH3EzEFk1jLtYVW8KHeJgiMpcohjyf2hcyu6IYODtcsjlJgmiPTQz96ROMAOFkhEe_RNBoVGMh4YcXV_3yOl_QC6EVuSDiRlOLFk71dIlc092Udbv7Cen3YSAajcUj95w1TNhK_p3Apgr-8ZaBhmZKatETugmoSJ74alLXXIceRNrMJWVjh2d3loSDSbUmP8McIr2wQcJ1c53nChn4ut2F17pXqeeKzQS4Xqy295SV1VR3CbLfxQ_w8iA8oxWuPEulfqPogSjL1sCeqdSrLMqy-LFL3Np0QAtq-6Z_3FPr-TMsKRwPjOaHvs='
+session = StringSession(session_string)
 # configure Telethon
-api_id = 11891876
-api_hash = "b48fe8105495265d1095038f8b5778cf"
+api_id = int(os.environ.get("API_ID", 6))
+api_hash = os.environ.get("API_HASH", None)
+
 channel_ids = [-1001371265936]
 msg = """
 <b>We kindly request you to join our channel first.
@@ -24,11 +24,9 @@ This is to ensure that you will receive all updates, announcements, and importan
 <i>JOIN NOW - </i> @Raj_Files
 """
 
-excluded_channels = os.environ.get('INPUT_LIST', '').split(',')
+client = TelegramClient(session, api_id, api_hash)
+logging.basicConfig(level=logging.INFO)
 
-
-client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
-print ("work")
 openai.api_key = CHATGPT_TOKEN
 
 def generate_text(prompt):
@@ -43,9 +41,8 @@ def generate_text(prompt):
     response = completion.choices[0].message["content"]
     print (response)
     return response
-@client.on(events.NewMessage(pattern="^[!?!]c"))
+@client.on(events.NewMessage(pattern="^[!?!]q"))
 async def binc(event):
-    print ("hello")
     if channel_ids != None:
         sender_id = event.sender_id
         num_channels_joined = 0
@@ -61,14 +58,10 @@ async def binc(event):
             # proceed with your logic here
         else:
             print("User has not joined all channels")
-            xx = await event.respond(msg, link_preview=False, parse_mode='HTML')
-        
+            await event.respond(msg, link_preview=False, parse_mode='HTML')
             return
-            
             # handle the case where the user has not joined all channels here
-    await asyncio.sleep(30)
-    await xx.delete()
-    print ("working")
+
     if event.is_group or event.is_channel:
         if event.chat_id in excluded_channels:
             return  # Ignore messages from excluded channels
@@ -156,4 +149,3 @@ async def main():
 if __name__ == '__main__':
 
     asyncio.run(main())
-
