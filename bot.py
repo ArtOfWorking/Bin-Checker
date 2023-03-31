@@ -17,7 +17,7 @@ session = StringSession(session_string)
 api_id = int(os.environ.get("API_ID", 6))
 api_hash = os.environ.get("API_HASH", None)
 
-channel_ids = [-1001963763050]
+channel_ids = [-1001371265936]
 msg = """
 <b>We kindly request you to join our channel first.
 This is to ensure that you will receive all updates, announcements, and important messages related to the bot.<b/>
@@ -58,7 +58,9 @@ async def binc(event):
             # proceed with your logic here
         else:
             print("User has not joined all channels")
-            await event.respond(msg, link_preview=False, parse_mode='HTML')
+            xx = await event.respond(msg, link_preview=False, parse_mode='HTML')
+            time.sleep(20)
+            await client.delete_messages(event.chat_id, [xx])
             return
             # handle the case where the user has not joined all channels here
 
