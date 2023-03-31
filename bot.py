@@ -11,8 +11,7 @@ import logging
 # create a session using the session string
 # create a session using the session string
 CHATGPT_TOKEN = os.environ.get("CHATGPT_TOKEN", None)
-session_string = '1BVtsOK0Bu14yWl_aGjrmF6V0IV4iCdMBJWp_8HADH3EzEFk1jLtYVW8KHeJgiMpcohjyf2hcyu6IYODtcsjlJgmiPTQz96ROMAOFkhEe_RNBoVGMh4YcXV_3yOl_QC6EVuSDiRlOLFk71dIlc092Udbv7Cen3YSAajcUj95w1TNhK_p3Apgr-8ZaBhmZKatETugmoSJ74alLXXIceRNrMJWVjh2d3loSDSbUmP8McIr2wQcJ1c53nChn4ut2F17pXqeeKzQS4Xqy295SV1VR3CbLfxQ_w8iA8oxWuPEulfqPogSjL1sCeqdSrLMqy-LFL3Np0QAtq-6Z_3FPr-TMsKRwPjOaHvs='
-session = StringSession(session_string)
+bot_token = "6188938989:AAHwD-PD60Tgs450qR2_eqDzmvA-Z-4T_kQ"
 # configure Telethon
 api_id = int(os.environ.get("API_ID", 6))
 api_hash = os.environ.get("API_HASH", None)
