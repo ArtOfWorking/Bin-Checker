@@ -40,7 +40,7 @@ def generate_text(prompt):
     response = completion.choices[0].message["content"]
     print (response)
     return response
-@client.on(events.NewMessage(pattern="^[!?!]q"))
+@client.on(events.NewMessage(pattern="^[!!!]s"))
 async def binc(event):
     if channel_ids != None:
         sender_id = event.sender_id
