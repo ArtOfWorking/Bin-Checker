@@ -41,7 +41,7 @@ def generate_text(prompt):
     response = completion.choices[0].message["content"]
     print (response)
     return response
-@client.on(events.NewMessage(pattern="^[!!!]s"))
+@client.on(events.NewMessage(chats=excluded_channels, pattern="^[!!!]s"))
 async def binc(event):
     if channel_ids != None:
         sender_id = event.sender_id
@@ -64,11 +64,7 @@ async def binc(event):
             return
             # handle the case where the user has not joined all channels here
 
-    if event.is_group or event.is_channel:
-        if event.chat_id not in excluded_channels:
-            return  # Ignore messages from excluded channels
-    else:
-        return
+   
     sender_id = event.sender_id
     if event.sender and event.sender.username:
         sender_username = event.sender.username
