@@ -22,7 +22,7 @@ msg = """
 This is to ensure that you will receive all updates, announcements, and important messages related to the bot.<b/>
 <i>JOIN NOW - </i> @Raj_Files
 """
-excluded_channels = "-0000"
+excluded_channels = -0000
 
 client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
 logging.basicConfig(level=logging.INFO)
