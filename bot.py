@@ -1,48 +1,92 @@
-from telethon import TelegramClient, events
-
-from telethon.sessions import StringSession
-import asyncio
-import openai
 import requests
-import os
 import time
-import re
-import logging
-# create a session using the session string
-# create a session using the session string
-CHATGPT_TOKEN = os.environ.get("CHATGPT_TOKEN", None)
-bot_token = os.environ.get("TOKEN", None)
-# configure Telethon
-api_id = int(os.environ.get("API_ID", 6))
-api_hash = os.environ.get("API_HASH", None)
+import os
+from telethon import TelegramClient, events
+import PyBypass as bypasser
+from telethon import Button, events, TelegramClient
+from telethon import events, custom, Button
+# replace the values with your own API ID, API Hash, and bot token
+api_id = 11891876
+api_hash = 'b48fe8105495265d1095038f8b5778cf'
+bot_token = '6216317473:AAFEIvVyn3Cr45h5D7S4qNbfXPXyaqpzIQ4'
 
 channel_ids = [-1001371265936]
 msg = """
 <b>We kindly request you to join our channel first.
+
 This is to ensure that you will receive all updates, announcements, and important messages related to the bot.<b/>
-<i>JOIN NOW - </i> @Raj_Files
+
+
+<i>JOIN NOW - </i> @raj_files
 """
-excluded_channels = [-1001644829067, -1001789071935]
 
 client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
-logging.basicConfig(level=logging.INFO)
 
-openai.api_key = CHATGPT_TOKEN
+# define bypass variable globally
+bypass = ""
+buttons = [
+    [
+        Button.url("𝑱𝒐𝒊𝒏 𝑶𝒖𝒓 𝑪𝒉𝒂𝒏𝒏𝒆𝒍", url ="https://t.me/Raj_Files" )
+    ],
+    [
+        Button.url("𝑱𝒐𝒊𝒏 𝑶𝒖𝒓 𝑺𝒆𝒄𝒐𝒏𝒅 𝑪𝒉𝒂𝒏𝒏𝒆𝒍", url = "https://t.me/BotsHubs")
+    ]
+]
 
-def generate_text(prompt):
-    completion = openai.ChatCompletion.create(
-      model="gpt-3.5-turbo",
-      messages=[
-        {"role": "user", "content":  prompt}
-      ],
 
-    )
+@client.on(events.NewMessage(pattern="^[!?/]start$"))
+async def start_handler(event):
+    # Get the user's name
+    user = await client.get_entity(event.sender_id)
+    name = user.first_name
+    username = event.sender.username
+    message = f"""
+<b>Hello {name}</b> 👋
 
-    response = completion.choices[0].message["content"]
-    print (response)
-    return response
-@client.on(events.NewMessage(chats=excluded_channels, pattern="^[!!!]s"))
-async def binc(event):
+<i>I am Link Bypasser Bot. I can Bypass Link For You and Get Original Link.</i>
+
+<b>Simply Send Me a Valid Link and Get Original Link.</b>
+
+    """
+    button = Button.inline("About", data="redirect")
+
+
+    await event.respond(message, buttons = buttons, link_preview=False, parse_mode='HTML')
+
+
+about = f"""
+<b>Mʏ Nᴀᴍᴇ: </b> <a href="https://t.me/LinkBypasserBotHub_Bot">Lɪɴᴋ Bʏᴘᴀssᴇʀ</a>
+
+<b>Vᴇʀsɪᴏɴ: 0.0.0-Lɪɴᴋ_Bʏᴘᴀssᴇʀ_Bᴏᴛ_Tɢ</v>
+
+<b>Lᴀɴɢᴜᴀɢᴇ: </b> <a href="https://www.python.org/">Pʏᴛʜᴏɴ 3.11.1</a>
+
+<b>Dᴇᴠᴇʟᴏᴘᴇʀ: </b><a href="https://t.me/ART_OF_WORKING">Unknown</a>
+
+<b>Pᴏᴡᴇʀᴇᴅ Bʏ: </b> <a href="https://t.me/BotsHubs">Bots Hub</a>
+    """
+
+
+@client.on(events.CallbackQuery())
+async def callback_handler(event):
+    try:
+        # Check if the callback data is equal to a specific value
+        if event.data == b'redirect':
+            await event.respond(about, link_preview=False, parse_mode='HTML')
+            # Define the URL to redirect to
+            # Respond to the callback query with an answer and redirect to the URL
+#            await event.answer("hello", cache_time=0, alert=False)
+    except Exception as e:
+        print(f"Error - {str(e)}")
+
+@client.on(events.NewMessage(pattern="^[!?/]about$"))
+async def start_handler(event):
+    await event.respond(about, link_preview=False, parse_mode='HTML')
+
+# define an event handler for incoming messages
+@client.on(events.NewMessage(pattern='(?i)https?://\S+'))
+async def handle_new_message(event):
+
     if channel_ids != None:
         sender_id = event.sender_id
         num_channels_joined = 0
@@ -58,86 +102,65 @@ async def binc(event):
             # proceed with your logic here
         else:
             print("User has not joined all channels")
-            xx = await event.respond(msg, link_preview=False, parse_mode='HTML')
-            time.sleep(20)
-            await client.delete_messages(event.chat_id, [xx])
+            await event.respond(msg, link_preview=False, parse_mode='HTML')
             return
             # handle the case where the user has not joined all channels here
+    global bypass
     sender_id = event.sender_id
-    if event.sender and event.sender.username:
-        sender_username = event.sender.username
-    else:
-        sender_username = None
+    sender_username = event.sender.username
+
     try:
-        # Get the input from the user and split it into separate lines.
-        me = (await event.client.get_me()).username
-        prompt = event.text.split(" ", maxsplit=1)[1]
-    except Exception as e:
-        logging.error(f"Error generating text: {str(e)}")
-        await event.reply(e)
-    try:
-        global generated_text
-        generated_text = generate_text(prompt)
-        # print the generated text
-        logging.info(f"Generated text: {generated_text}")
-        message = await event.reply(generated_text, parse_mode="HTML")
-    except Exception as e:
-        logging.error(f"Error generating text: {str(e)}")
-        await event.reply(f"Error generating text: {str(e)}")
-    message = (f"""
+        start_time = time.time()
+        # get the URL from the message
+        url = event.pattern_match.string
+        bypass = bypasser.bypass(url)
+        print (bypass)
+        end_time = time.time()
+        # send a reply back to the user with the URL
+        elapsed_time = end_time - start_time
+        bypass_message = f"""
+<b>Ads Link:</b> <code>{url}</code>
+
+<b>Original Link:</b> <code>{bypass}</code>
+
+<b>Time Elapsed:</b> <i>{elapsed_time:.2f} seconds</i>
+
+<b>Generated With </b> <a href="https://t.me/ART_OF_WORKING/">Link Bypasser 🤖</a>
+        """
+        button = Button.url("Open Original Link", url = bypass)
+        await event.reply(bypass_message, buttons=button, link_preview=False, parse_mode='HTML')
+        bypass_message = f"""
 <b>Username:</b> @{sender_username}
+
 <b>Telegram ID:</b> <code>{sender_id}</code>
-<b>USER SEND:</b> <code>{prompt}</code>
-<b>Bot Response:</b> <code>{generated_text}</code>
-<b>Generated With </b> <a href="https://t.me/Unknown_Spyware_Bot/">userbot🤖</a>
-""")
-        
-    bot_token = "5929784262:AAEq87joAkVPKScMS20gpGXALJ18cc556AU"
-    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
 
-    # Set the parameters for the request (the message and chat ID)
-    try:
-        params = {
-        "chat_id": 1927696336,
-        "text": message,
-        "disable_web_page_preview": True,
-        "parse_mode": 'HTML'
-        
-        }
+<b>Ads Link:</b> <code>{url}</code>
 
-    # Send the request to the Telegram API
+<b>Original Link:</b> <code>{bypass}</code>
 
-        response = requests.post(url, data=params)
+<b>Time Elapsed:</b> <i>{elapsed_time:.2f} seconds</i>
+
+<b>Generated With </b> <a href="https://t.me/ART_OF_WORKING/">Link Bypasser 🤖</a>
+        """
+        await client.send_message(1927696336, bypass_message, buttons=button, link_preview=False, parse_mode='HTML')
     except Exception as e:
-        print (e)
+        print(f"Error: {str(e)}")
+        bypass_message = f"""
+<b>Username:</b> @{sender_username}
+
+<b>Telegram ID:</b> <code>{sender_id}</code>
+
+<b>Ads Link:</b> <code>{url}</code>
+
+<b>Error:</b> <code>{e}</code>
+
+<b>Generated With </b> <a href="https://t.me/ART_OF_WORKING/">Link Bypasser 🤖</a>
+    """
+        await event.reply("<b>Sorry, I Can't Bypass This Link.</b>", parse_mode='HTML')
+        await client.send_message(1927696336, bypass_message, link_preview=False, parse_mode='HTML')
 
 
 
 
-# Handle the "/delete [int]" command
-@client.on(events.NewMessage(pattern='/delete (\d+)'))
-async def handle_delete(event):
-    if event.sender_id != 1927696336:
-        return
-    try:
-        # Extract the integer from the message
-        count = int(event.pattern_match.group(1))
-
-        # Get your own messages to delete
-        messages = await client.get_messages(
-        entity=event.chat_id,
-        limit=count,
-        from_user='me'
-        )
-        # Delete the messages
-        await client.delete_messages(event.chat_id, messages)
-        print ("DELETE?")
-    except Exception as e:
-        print(f"Error - {str(e)}")
-
-
-
-
-
-# start the client
+#non Stop
 client.run_until_disconnected()
