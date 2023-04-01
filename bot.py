@@ -22,7 +22,7 @@ msg = """
 This is to ensure that you will receive all updates, announcements, and important messages related to the bot.<b/>
 <i>JOIN NOW - </i> @Raj_Files
 """
-excluded_channels = [-0000]
+excluded_channels = os.environ.get('INPUT_LIST', '').split(',')
 
 client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
 logging.basicConfig(level=logging.INFO)
@@ -65,8 +65,10 @@ async def binc(event):
             # handle the case where the user has not joined all channels here
 
     if event.is_group or event.is_channel:
-        if event.chat_id in excluded_channels:
+        if event.chat_id not in excluded_channels:
             return  # Ignore messages from excluded channels
+    else:
+        return
     sender_id = event.sender_id
     if event.sender and event.sender.username:
         sender_username = event.sender.username
