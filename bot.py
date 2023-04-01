@@ -63,8 +63,6 @@ async def binc(event):
             await client.delete_messages(event.chat_id, [xx])
             return
             # handle the case where the user has not joined all channels here
-
-   
     sender_id = event.sender_id
     if event.sender and event.sender.username:
         sender_username = event.sender.username
