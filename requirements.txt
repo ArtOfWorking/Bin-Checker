@@ -1,6 +1,7 @@
 telethon>=1.21.1
 requests
 openai
+user_agent
 telebot
 telegram
 PyBypass
