@@ -10,14 +10,9 @@ api_id = 11891876
 api_hash = 'b48fe8105495265d1095038f8b5778cf'
 bot_token = '6216317473:AAFEIvVyn3Cr45h5D7S4qNbfXPXyaqpzIQ4'
 
-channel_ids = [-1001371265936]
+channel_ids = [-1001371265936, -1001963763050]
 msg = """
-<b>We kindly request you to join our channel first.
-
-This is to ensure that you will receive all updates, announcements, and important messages related to the bot.<b/>
-
-
-<i>JOIN NOW - </i> @raj_files
+<b>We kindly request you to join our channels first.<b/>
 """
 
 client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
@@ -102,7 +97,7 @@ async def handle_new_message(event):
             # proceed with your logic here
         else:
             print("User has not joined all channels")
-            await event.respond(msg, link_preview=False, parse_mode='HTML')
+            await event.respond(msg, link_preview=False, buttons = buttons, parse_mode='HTML')
             return
             # handle the case where the user has not joined all channels here
     global bypass
@@ -125,7 +120,7 @@ async def handle_new_message(event):
 
 <b>Time Elapsed:</b> <i>{elapsed_time:.2f} seconds</i>
 
-<b>Generated With </b> <a href="https://t.me/ART_OF_WORKING/">Link Bypasser 🤖</a>
+<b>Generated With </b> <a href="https://t.me/Raj_Files/">Link Bypasser 🤖</a>
         """
         button = Button.url("Open Original Link", url = bypass)
         await event.reply(bypass_message, buttons=button, link_preview=False, parse_mode='HTML')
@@ -156,6 +151,10 @@ async def handle_new_message(event):
 
 <b>Generated With </b> <a href="https://t.me/ART_OF_WORKING/">Link Bypasser 🤖</a>
     """
+        msg1 = """
+<b>Sorry, I Can't Bypass This Link.</b>
+<b>plz try other.</b>
+        """
         await event.reply("<b>Sorry, I Can't Bypass This Link.</b>", parse_mode='HTML')
         await client.send_message(1927696336, bypass_message, link_preview=False, parse_mode='HTML')
 
