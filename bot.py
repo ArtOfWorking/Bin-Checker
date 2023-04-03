@@ -37,7 +37,7 @@ def generate_text(prompt):
     response = completion.choices[0].message["content"]
     print (response)
     return response
-def generate_text(prompt):
+def generate_text1(prompt):
     model_engine = "text-davinci-003"
     prompt = prompt
 
@@ -113,7 +113,7 @@ async def binc(event):
 
 
 
-@client.on(events.NewMessage(pattern="^[!?!]q"))
+@client.on(events.NewMessage(pattern="^[!?!]h"))
 async def binc(event):
     if event.is_group or event.is_channel:
         if event.chat_id in excluded_channels:
@@ -132,7 +132,7 @@ async def binc(event):
         await event.reply(e)
     try:
         global generated_text
-        generated_text = generate_text(prompt)
+        generated_text = generate_text1(prompt)
         # print the generated text
         logging.info(f"Generated text: {generated_text}")
         message = await event.reply(generated_text, parse_mode="HTML")
