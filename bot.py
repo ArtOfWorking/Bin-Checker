@@ -101,7 +101,7 @@ async def handle_new_message(event):
                 break
     if num_channels_joined != len(channel_ids):
         message = f"{user.first_name}, you need to join all the channels to use the bot."
-        await event.respond(message)
+        await event.respond(message, buttons = buttons, link_preview=False, parse_mode='HTML')
         return
             # handle the case where the user has not joined all channels here
     global bypass
