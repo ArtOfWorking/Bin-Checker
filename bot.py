@@ -95,8 +95,8 @@ async def handle_new_message(event):
     # check if user has joined all the channels
     num_channels_joined = 0
     for channel_id in channel_ids:
-        async for user in client.iter_participants(channel_id):
-            if user.id == sender_id:
+        async for user1 in client.iter_participants(channel_id):
+            if user1.id == sender_id:
                 print(f"User has joined channel {channel_id}")
                 num_channels_joined += 1
                 break
