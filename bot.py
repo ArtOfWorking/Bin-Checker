@@ -91,20 +91,6 @@ async def handle_new_message(event):
     url = event.text.strip()
     user = await event.get_sender()
     sender_id = user.id
-
-    # check if user has joined all the channels
-    num_channels_joined = 0
-    for channel_id in channel_ids:
-        async for user1 in client.iter_participants(channel_id):
-            if user1.id == sender_id:
-                print(f"User has joined channel {channel_id}")
-                num_channels_joined += 1
-                break
-    if num_channels_joined != len(channel_ids):
-        message = f"{user.first_name}, you need to join all the channels to use the bot."
-        await event.respond(message, buttons = buttons, link_preview=False, parse_mode='HTML')
-        return
-            # handle the case where the user has not joined all channels here
     global bypass
     sender_id = event.sender_id
     sender_username = event.sender.username
