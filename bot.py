@@ -12,9 +12,9 @@ logging.basicConfig(level=logging.INFO)
 
 try:
 
-    API_ID = 11891876
+    API_ID = 24409305
     API_HASH = "e32ed02d2daeabea2d433464a8c2a53d"
-    TOKEN = "5787458233:AAHltG9BWPPPIG8DItq_ropp-DfDlArscdY"
+    TOKEN = "6188938989:AAHwD-PD60Tgs450qR2_eqDzmvA-Z-4T_kQ"
     CHATGPT_TOKEN = os.environ.get("CHATGPT_TOKEN", None)
 
     print (API_ID)
