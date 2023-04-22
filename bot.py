@@ -15,7 +15,7 @@ try:
     API_ID = 11891876
     API_HASH = "e32ed02d2daeabea2d433464a8c2a53d"
     TOKEN = "5787458233:AAHltG9BWPPPIG8DItq_ropp-DfDlArscdY"
-    CHATGPT_TOKEN = "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"
+    CHATGPT_TOKEN = os.environ.get("CHATGPT_TOKEN", None)
 
     print (API_ID)
     print (API_HASH)
