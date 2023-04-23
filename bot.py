@@ -85,13 +85,19 @@ async def start_handler(event):
 # define an event handler for incoming messages
 @client.on(events.NewMessage(pattern='(?i)https?://\S+'))
 async def handle_new_message(event):
+    global url
     if event.is_group:
         if '/bp' not in event.message.message:
+        
             return
+        url = event.text.split(" ", maxsplit=1)[1]
+    else:
+        url = event.pattern_match.string
+        
     if 'mdisk.me' in event.text:
         return
     global bypass
-    url = event.text.strip()
+    #url = event.text.strip()
     user = await event.get_sender()
     sender_id = user.id
     global bypass
@@ -101,7 +107,7 @@ async def handle_new_message(event):
     try:
         start_time = time.time()
         # get the URL from the message
-        url = event.pattern_match.string
+        #url = event.pattern_match.string
         bypass = bypasser.bypass(url)
         print (bypass)
         end_time = time.time()
