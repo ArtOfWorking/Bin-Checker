@@ -1,6 +1,8 @@
 import requests
 import time
 
+import re
+
 import os
 from telethon import TelegramClient, events
 import PyBypass as bypasser
@@ -18,7 +20,7 @@ channel_ids = [-1001371265936, -1001963763050]
 msg = """
 <b>We kindly request you to join our channels first.<b/>
 """
-
+pattern = r'(?i)https?://\S+'
 client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
 
 # define bypass variable globally
@@ -83,16 +85,28 @@ async def start_handler(event):
     await event.respond(about, link_preview=False, parse_mode='HTML')
 
 # define an event handler for incoming messages
-@client.on(events.NewMessage(pattern='(?i)https?://\S+'))
+@client.on(events.NewMessage)
 async def handle_new_message(event):
     global url
+    match = re.search(pattern, event.message.message)
+    if match:
+        url = match.group()
+        print('Found URL:', url)
+    else:
+        return
+    
     if event.is_group:
         if '/bp' not in event.message.message:
+            print ('/bp')
+            
         
             return
-        url = event.text.split(" ", maxsplit=1)[1]
+        
+        else:
+            print ("yes")
+            url = event.text.split(" ", maxsplit=1)[1]
     else:
-        url = event.pattern_match.string
+        url = event.message.message
         
     if 'mdisk.me' in event.text:
         return
@@ -108,6 +122,7 @@ async def handle_new_message(event):
         start_time = time.time()
         # get the URL from the message
         #url = event.pattern_match.string
+        print (url)
         bypass = bypasser.bypass(url)
         print (bypass)
         end_time = time.time()
