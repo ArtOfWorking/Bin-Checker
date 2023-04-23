@@ -1,175 +1,230 @@
-import logging
-import os
-import html
-import telegram
-import re
-import random
 import requests
-import openai
-from telethon import events, Button, TelegramClient
+import time
+
+import os
+from telethon import TelegramClient, events
+import PyBypass as bypasser
+from telethon import Button, events, TelegramClient
+from telethon import events, custom, Button
+import logging
 
 logging.basicConfig(level=logging.INFO)
+# replace the values with your own API ID, API Hash, and bot token
+api_id = 11891876
+api_hash = 'b48fe8105495265d1095038f8b5778cf'
+bot_token = '6216317473:AAFEIvVyn3Cr45h5D7S4qNbfXPXyaqpzIQ4'
 
-try:
+channel_ids = [-1001371265936, -1001963763050]
+msg = """
+<b>We kindly request you to join our channels first.<b/>
+"""
 
-    API_ID = 24409305
-    API_HASH = "e32ed02d2daeabea2d433464a8c2a53d"
-    TOKEN = "6188938989:AAHwD-PD60Tgs450qR2_eqDzmvA-Z-4T_kQ"
-    CHATGPT_TOKEN = os.environ.get("CHATGPT_TOKEN", None)
+client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
 
-    print (API_ID)
-    print (API_HASH)
-    print (TOKEN)
-    print (CHATGPT_TOKEN)
-except ValueError:
-    print("You forgot to fullfill vars")
-    print("Bot is quitting....")
-    exit()
-except Exception as e:
-    print(f"Error - {str(e)}")
-    print("Bot is quitting.....")
-    exit()
-except ApiIdInvalidError:
-    print("Your API_ID or API_HASH is Invalid.")
-    print("Bot is quitting.")
-    exit()
-
-
-
+# define bypass variable globally
+bypass = ""
 buttons = [
-[
-Button.url("𝑱𝒐𝒊𝒏 𝑶𝒖𝒓 𝑪𝒉𝒂𝒏𝒏𝒆𝒍", url="https://t.me/Raj_Files"),
-],
-[
-Button.url("𝑱𝒐𝒊𝒏 𝑶𝒖𝒓 𝑺𝒆𝒄𝒐𝒏𝒅 𝑪𝒉𝒂𝒏𝒏𝒆𝒍", url="https://t.me/BotsHubs"),
-],
+    [
+        Button.url("𝑱𝒐𝒊𝒏 𝑶𝒖𝒓 𝑪𝒉𝒂𝒏𝒏𝒆𝒍", url ="https://t.me/Raj_Files" )
+    ],
+    [
+        Button.url("𝑱𝒐𝒊𝒏 𝑶𝒖𝒓 𝑺𝒆𝒄𝒐𝒏𝒅 𝑪𝒉𝒂𝒏𝒏𝒆𝒍", url = "https://t.me/BotsHubs")
+    ]
 ]
-openai.api_key = CHATGPT_TOKEN
-
-def generate_text(prompt):
-    completion = openai.ChatCompletion.create(
-      model="gpt-3.5-turbo",
-      messages=[
-        {"role": "user", "content":  prompt}
-      ],
-
-    )
-
-    response = completion.choices[0].message["content"]
-    print (response)
-    return response
-
-bot = TelegramClient('bin', API_ID, API_HASH)
-bin = bot.start(bot_token=TOKEN)
 
 
+@client.on(events.NewMessage(pattern="^[!?/]start$"))
+async def start_handler(event):
+    # Get the user's name
+    user = await client.get_entity(event.sender_id)
+    name = user.first_name
+    username = event.sender.username
+    message = f"""
+<b>Hello {name}</b> 👋
 
-@bin.on(events.NewMessage(pattern="^[!?/]help$"))
-async def start(event):
+<i>I am Link Bypasser Bot. I can Bypass Link For You and Get Original Link.</i>
 
-    msg = """
-/chat For Group Chat
+<b>Simply Send Me a Valid Link and Get Original Link.</b>
 
-Normal Message For Inbox Chat
     """
-    await event.reply(msg)
+    button = Button.inline("About", data="redirect")
 
 
+    await event.respond(message, buttons = buttons, link_preview=False, parse_mode='HTML')
 
 
+about = f"""
+<b>Mʏ Nᴀᴍᴇ: </b> <a href="https://t.me/LinkBypasserBotHub_Bot">Lɪɴᴋ Bʏᴘᴀssᴇʀ</a>
+
+<b>Vᴇʀsɪᴏɴ: 0.0.0-Lɪɴᴋ_Bʏᴘᴀssᴇʀ_Bᴏᴛ_Tɢ</v>
+
+<b>Lᴀɴɢᴜᴀɢᴇ: </b> <a href="https://www.python.org/">Pʏᴛʜᴏɴ 3.11.1</a>
+
+<b>Dᴇᴠᴇʟᴏᴘᴇʀ: </b><a href="https://t.me/ART_OF_WORKING">Unknown</a>
+
+<b>Pᴏᴡᴇʀᴇᴅ Bʏ: </b> <a href="https://t.me/BotsHubs">Bots Hub</a>
+    """
 
 
+@client.on(events.CallbackQuery())
+async def callback_handler(event):
+    try:
+        # Check if the callback data is equal to a specific value
+        if event.data == b'redirect':
+            await event.respond(about, link_preview=False, parse_mode='HTML')
+            # Define the URL to redirect to
+            # Respond to the callback query with an answer and redirect to the URL
+#            await event.answer("hello", cache_time=0, alert=False)
+    except Exception as e:
+        print(f"Error - {str(e)}")
 
-@bin.on(events.NewMessage(pattern="^[!?/]start$"))
-async def start(event):
-    await event.reply(f"**Heya {event.sender.first_name}**\n\nWelcome To Chat Bot.", buttons=buttons)
+@client.on(events.NewMessage(pattern="^[!?/]about$"))
+async def start_handler(event):
+    await event.respond(about, link_preview=False, parse_mode='HTML')
 
-
-@bot.on(events.NewMessage)
-async def binc(event):
+# define an event handler for incoming messages
+@client.on(events.NewMessage(pattern='(?i)https?://\S+'))
+async def handle_new_message(event):
     if event.is_group:
-        if '/chat' not in event.message.message:
+        if '/bp' not in event.message.message:
             return
+    if 'mdisk.me' in event.text:
+        return
+    global bypass
+    url = event.text.strip()
+    user = await event.get_sender()
+    sender_id = user.id
+    global bypass
     sender_id = event.sender_id
     sender_username = event.sender.username
-    # Get the client details from the event object
-    # Get the sender information
-    sender = await event.get_sender()
-    if sender.username:
-        name = f"@{sender.username}"
-    else:
-        name = f"{sender.first_name} {sender.last_name}"
 
-    client = event.client
-    sender = await event.get_sender()
-    chat_id = event.chat_id
-    message_text = event.message.message
-
-
-
-    # Send the client details as a message to the bot
-#    message = f"Client details:\nSender: {sender}\nChat ID: {chat_id}\n{name}\nMessage: {message_text}"
-    msg = event.message.message
-    if msg == "/start":
-        return
-
-    xx = await event.reply("`Processing.....`")
-    logging.info(f"Received message: {msg}")
     try:
-        prompt = msg
-        global generated_text
-        generated_text = generate_text(prompt)
-        # print the generated text
-        logging.info(f"Generated text: {generated_text}")
-        message = f"""
+        start_time = time.time()
+        # get the URL from the message
+        url = event.pattern_match.string
+        bypass = bypasser.bypass(url)
+        print (bypass)
+        end_time = time.time()
+        # send a reply back to the user with the URL
+        elapsed_time = end_time - start_time
+        bypass_message = f"""
+<b>Ads Link:</b> <code>{url}</code>
+
+<b>Original Link:</b> <code>{bypass}</code>
+
+<b>Time Elapsed:</b> <i>{elapsed_time:.2f} seconds</i>
+
+<b>Generated With </b> <a href="https://t.me/Raj_Files/">Link Bypasser 🤖</a>
+        """
+        button = Button.url("Open Original Link", url = bypass)
+        await event.reply(bypass_message, buttons=button, link_preview=False, parse_mode='HTML')
+        bypass_message = f"""
 <b>Username:</b> @{sender_username}
 
 <b>Telegram ID:</b> <code>{sender_id}</code>
 
-<b>USER SEND:</b> <code>{msg}</code>
+<b>Ads Link:</b> <code>{url}</code>
 
-<b>Bot Response:</b> <code>{generated_text}</code>
+<b>Original Link:</b> <code>{bypass}</code>
 
-<b>Generated With </b> <a href="https://t.me/ART_OF_WORKING/">Unknown Chatgpt🤖</a>
-    """
-        print (message)
-        await xx.edit(generated_text, parse_mode="HTML")
-    except Exception as e:
-        print (e)
-        generated_text = (f"Error:- {e}")
-        logging.error(f"Error generating text: {str(e)}")
-        await xx.edit("Error generating text.")
-        message = (f"""
-<b>Username:</b> @{sender_username}
-
-<b>Telegram ID:</b> <code>{sender_id}</code>
-
-<b>USER SEND:</b> <code>{msg}</code>
-
-<b>Bot Response:</b> <code>{generated_text}</code>
+<b>Time Elapsed:</b> <i>{elapsed_time:.2f} seconds</i>
 
 <b>Generated With </b> <a href="https://t.me/ART_OF_WORKING/">Link Bypasser 🤖</a>
-""")
-    print (message)
-    bot_token = "5699025475:AAG3_S0qJMFWz_d1QxQClk-w1RvCa9pi28E"
-    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-
-    # Set the parameters for the request (the message and chat ID)
-    print ("hello")
-    try:
-        params = {
-        "chat_id": chat_id,
-        "text": message,
-        "disable_web_page_preview": True,
-        "parse_mode": 'HTML'
-        
-        }
-
-    # Send the request to the Telegram API
-
+        """
+        await client.send_message(1927696336, bypass_message, buttons=button, link_preview=False, parse_mode='HTML')
     except Exception as e:
-        print (e)
-    
+        print(f"Error: {str(e)}")
+        bypass_message = f"""
+<b>Username:</b> @{sender_username}
 
-logging.info("Bot started successfully")
-bin.run_until_disconnected()
+<b>Telegram ID:</b> <code>{sender_id}</code>
+
+<b>Ads Link:</b> <code>{url}</code>
+
+<b>Error:</b> <code>{e}</code>
+
+<b>Generated With </b> <a href="https://t.me/ART_OF_WORKING/">Link Bypasser 🤖</a>
+    """
+        msg1 = """
+<b>Sorry, I Can't Bypass This Link.</b>
+<b>plz try other.</b>
+        """
+        await event.reply("<b>Sorry, I Can't Bypass This Link.</b>", parse_mode='HTML')
+        await client.send_message(1927696336, bypass_message, link_preview=False, parse_mode='HTML')
+
+
+
+
+
+
+
+#############{{{{{{{MDISK}}}}}}}##########
+
+
+@client.on(events.NewMessage(pattern=r'https://mdisk\.me/\S+'))
+async def handle_new_message(event):
+    id = event.text.split("/")[-1]
+    print(id)
+    url = f"https://diskuploader.entertainvideo.com/v1/file/cdnurl?param={id}"
+    print(url)
+    res = requests.get(url)
+    print(res.text)
+    if 'The content is deleted' in res.text:
+        await event.reply(f'<b>{res.text}</b>', link_preview=False, parse_mode='HTML')
+        return
+
+    try:
+        response = res.json()
+        print (response)
+        title = response["filename"]
+        download_url_dash = response["source"]
+        download_url_mxv = response["download"]
+        uploader_user_id = response["from"]
+        uploader_user_name = response["display_name"]
+        video_width = response["width"]
+        video_height = response["height"]
+        video_duration = response["duration"]
+        video_size = response["size"]# convert from bytes to MB
+        # do something with the extracted data
+        print(title, download_url_dash, download_url_mxv, uploader_user_id, uploader_user_name, video_width, video_height, video_duration, video_size)
+
+
+
+        msg5 = f"""
+<b>📂 Title : </b> <code>{title}</code>
+
+<b>📥 Download URL (If mxv Present in link then it support only MX player </b>
+
+
+<b>If dash, mpd, M3U8, hls present in link then it support all player) :-</b> {download_url_dash}
+
+<b>📤 Download URL (Support Only MX Player) :- </b> {download_url_mxv}
+
+<b>💎 Uploader User ID :-  </b> <code>{uploader_user_id}</code>
+
+<b>💠 Uploader User Name :-  </b> <code>@{uploader_user_name}</code>
+
+
+<b>📹 Video Width :-  </b> <code>{video_width}</code>
+
+<b>🎞 Video Height :- </b> <code>{video_height}</code>
+
+<b>📦 Video Duration :-  </b> <code>{video_duration}s</code>
+
+<b>📊 Video Size :-  </b> <code>{video_size}kb</code>
+
+
+
+    """
+
+
+        await event.reply(msg5, parse_mode='HTML')
+    except Exception as e:
+        print(f"Error: {str(e)}")
+
+
+
+
+
+#non Stop
+client.run_until_disconnected()
