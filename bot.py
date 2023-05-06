@@ -47,12 +47,13 @@ async def start_handler(event):
 <i>I am Link Bypasser Bot. I can Bypass Link For You and Get Original Link.</i>
 
 <b>Simply Send Me a Valid Link and Get Original Link.</b>
+<b> <code>/bp Link</code> if groups</b>
 
     """
     button = Button.inline("About", data="redirect")
 
 
-    await event.respond(message, buttons = buttons, link_preview=False, parse_mode='HTML')
+    await event.respond(message, link_preview=False, parse_mode='HTML')
 
 
 about = f"""
@@ -94,20 +95,20 @@ async def handle_new_message(event):
         print('Found URL:', url)
     else:
         return
-    
+
     if event.is_group:
         if '/bp' not in event.message.message:
             print ('/bp')
-            
-        
+
+
             return
-        
+
         else:
             print ("yes")
             url = event.text.split(" ", maxsplit=1)[1]
     else:
         url = event.message.message
-        
+
     if 'mdisk.me' in event.text:
         return
     global bypass
