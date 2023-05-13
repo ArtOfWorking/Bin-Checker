@@ -6,3 +6,4 @@ telebot
 telegram
 PyBypass
 cfscrape
+pyOpenSSL==20.0.1
