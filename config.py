@@ -5,9 +5,9 @@
 
 api_id = 14953313
 api_hash = '4f26f8e9f0d42ea55ab19325b5e613d1'
-bot_token = "6254074948:AAF0zYkxIanMiIHW27_6LOWfXgQF4d2DTLI"
-chat_id = -1001789071935
-message_id = 8171
+bot_token = "6295817509:AAGM3PsswyvTDGyQ5RE757mlTdmHLnBxXBY"
+chat_id = -1001985490607
+message_id = 194
 
 
 
