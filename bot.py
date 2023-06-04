@@ -44,7 +44,7 @@ def copy_messages(to_chat, message, client):
                         app.send_audio(to_chat, file, caption=caption)
                     else:
                         app.send_document(to_chat, file, caption=caption)
-    os.remove(file_path)
+        os.remove(file_path)
             
     except Exception as e:
         print(e)
