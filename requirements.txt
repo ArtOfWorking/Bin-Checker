@@ -1,3 +1,4 @@
+pyrogram 
 telethon>=1.21.1
 requests
 openai
