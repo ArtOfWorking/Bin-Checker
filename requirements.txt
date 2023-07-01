@@ -1,3 +1,12 @@
-beautifulsoup4==4.12.2
-requests==2.30.0
-Pyrogram==2.0.106
+pyrogram 
+telethon>=1.21.1
+requests
+openai
+user_agent
+telebot
+telegram
+PyBypass
+cfscrape
+pyOpenSSL==20.0.1
+urllib3==1.24.3
+TgCrypto
